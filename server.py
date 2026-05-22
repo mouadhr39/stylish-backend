@@ -3,6 +3,7 @@ from flask import Flask, jsonify, abort, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
