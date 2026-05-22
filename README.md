@@ -125,6 +125,15 @@ stylish-backend/
 
 ### Connection Issues
 - Ensure PostgreSQL is running: `sudo systemctl status postgresql` (Linux) or `brew services list` (macOS)
+- Ensure the configuration file *.env is correctly "sourced", for a better startup of the server use a script like:
+```bash
+#!/bin/bash
+echo "Starting server..."
+set -a
+source config.env
+set +a
+python3 server.py
+```
 - Verify the `.env` file contains the correct database URL
 - Check that the database user has sufficient privileges
 
