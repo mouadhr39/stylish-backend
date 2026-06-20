@@ -38,7 +38,7 @@ class Product(db.Model):
     image_path = db.Column(db.String(255), nullable=True)
 
 # Routes
-@app.route('/api/products', methods=['GET'])
+@app.route('/v1/products', methods=['GET'])
 def get_products():
     categories = Category.query.all()
     result = {}
@@ -59,25 +59,40 @@ def get_products():
         ]
     return jsonify(result)
 
-@app.route('/api/products/<string:category_code>', methods=['GET'])
+@app.route('/v1/products/<string:category_code>', methods=['GET'])
 def get_products_by_category(category_code):
-    products = Product.query.filter_by(category_code=category_code).all()
-    return jsonify([
-        {
-            "id": p.id,
-            "name": p.name,
-            "sku": p.sku,
-            "price": float(p.price),
-            "currency": p.currency,
-            "inStock": p.in_stock,
-            "rating": float(p.rating),
-            "reviews": p.reviews,
-            "imagePath": p.image_path
-        }
-        for p in products
-    ])
+    
+    category = Category.query.filter_by(code=category_code).first()
+    if not category:
+        abort(404, description="Category not found")
 
-@app.route('/api/product/<string:sku>', methods=['GET'])
+    products = Product.query.filter_by(category_code=category_code).all()
+    
+    if not products:
+        abort(404, description="No products found for this category")
+    
+    result = {
+        "id": category.id,
+        "name": category.name,
+        "code": category.code,
+        "products": [
+            {
+                "id": p.id,
+                "name": p.name,
+                "sku": p.sku,
+                "price": float(p.price),
+                "currency": p.currency,
+                "inStock": p.in_stock,
+                "rating": float(p.rating),
+                "reviews": p.reviews,
+                "imagePath": p.image_path
+            }
+            for p in products
+        ]}
+        
+    return jsonify(result)
+
+@app.route('/v1/product/<string:sku>', methods=['GET'])
 def get_product(sku):
     product = Product.query.filter_by(sku=sku).first()
     if not product:
@@ -96,12 +111,12 @@ def get_product(sku):
     })
 
 # CRUD Endpoints for Categories
-@app.route('/api/categories', methods=['GET'])
+@app.route('/v1/categories', methods=['GET'])
 def get_categories():
     categories = Category.query.all()
     return jsonify([{"id": c.id, "code": c.code, "name": c.name} for c in categories])
 
-@app.route('/api/category', methods=['POST'])
+@app.route('/v1/category', methods=['POST'])
 def create_category():
     data = request.json
     if not data or not data.get('name'):
@@ -120,7 +135,7 @@ def create_category():
     db.session.commit()
     return jsonify({"id": category.id, "code": category.code, "name": category.name}), 201
 
-@app.route('/api/category/<string:category_code>', methods=['PUT'])
+@app.route('/v1/category/<string:category_code>', methods=['PUT'])
 def update_category(category_code):
     category = Category.query.filter_by(code=category_code).first()
     if not category:
@@ -138,7 +153,7 @@ def update_category(category_code):
     db.session.commit()
     return jsonify({"id": category.id, "code": category.code, "name": category.name})
 
-@app.route('/api/category/<string:category_code>', methods=['DELETE'])
+@app.route('/v1/category/<string:category_code>', methods=['DELETE'])
 def delete_category(category_code):
     category = Category.query.filter_by(code=category_code).first()
     if not category:
@@ -149,7 +164,7 @@ def delete_category(category_code):
     return '', 204
 
 # CRUD Endpoints for Products
-@app.route('/api/product', methods=['POST'])
+@app.route('/v1/product', methods=['POST'])
 def create_product():
     data = request.json
     required = ['name', 'sku', 'price', 'currency', 'category_code']
@@ -186,7 +201,7 @@ def create_product():
         "reviews": product.reviews
     }), 201
 
-@app.route('/api/product/<int:product_id>', methods=['PUT'])
+@app.route('/v1/product/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
     product = Product.query.get(product_id)
     if not product:
@@ -233,7 +248,7 @@ def update_product(product_id):
         "reviews": product.reviews
     })
 
-@app.route('/api/product/<int:product_id>', methods=['DELETE'])
+@app.route('/v1/product/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     product = Product.query.get(product_id)
     if not product:

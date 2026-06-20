@@ -1,11 +1,14 @@
 -- Cleanup (optional)
--- Drop in order of dependencies: product first (has foreign key), then category
-DROP TABLE IF EXISTS product CASCADE;
-DROP TABLE IF EXISTS category CASCADE;
+-- Drop in order of dependencies: product first (has foreign key), then category, then user
+-- DROP TABLE IF EXISTS product CASCADE;
+-- DROP TABLE IF EXISTS category CASCADE;
+-- DROP TABLE IF EXISTS user CASCADE;
 
 -- Reset sequences for auto-increment
-DROP SEQUENCE IF EXISTS product_id_seq;
-DROP SEQUENCE IF EXISTS category_id_seq;
+-- DROP SEQUENCE IF EXISTS product_id_seq;
+-- DROP SEQUENCE IF EXISTS category_id_seq;
+-- DROP SEQUENCE IF EXISTS user_id_seq;
+-- Note: user table sequence is dropped with the table
 
 -- =====================================================
 -- CATEGORY TABLE
@@ -38,4 +41,21 @@ CREATE TABLE product (
         FOREIGN KEY(category_code)
         REFERENCES category(code)
         ON DELETE CASCADE
+);
+
+-- =====================================================
+-- EXTENSIONS
+-- =====================================================
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- =====================================================
+-- USER TABLE
+-- =====================================================
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    role VARCHAR(255) NOT NULL,
+    passwd_hash VARCHAR(255) NOT NULL, -- will store bcrypt hash
+    name VARCHAR(255),
+    surname VARCHAR(255)
 );

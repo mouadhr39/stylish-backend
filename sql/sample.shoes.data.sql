@@ -45,7 +45,7 @@ VALUES
     true,
     4.7,
     842,
-    'card-image1.jpg'
+    'card-item1.jpg'
 ),
 (
     'Nike Metcon 9',
@@ -56,7 +56,7 @@ VALUES
     true,
     4.6,
     421,
-    'card-image2.jpg'
+    'card-item2.jpg'
 ),
 (
     'Nike Air Force 1',
@@ -67,7 +67,7 @@ VALUES
     true,
     4.8,
     1540,
-    'card-image3.jpg'
+    'card-item3.jpg'
 ),
 (
     'Nike LeBron Witness 8',
@@ -78,7 +78,7 @@ VALUES
     true,
     4.5,
     367,
-    'card-image4.jpg'
+    'card-item4.jpg'
 ),
 
 -- =========================================
@@ -93,7 +93,7 @@ VALUES
     true,
     4.8,
     978,
-    'card-image5.jpg'
+    'card-item5.jpg'
 ),
 (
     'Adidas Harden Vol. 8',
@@ -104,7 +104,7 @@ VALUES
     true,
     4.6,
     285,
-    'card-image6.jpg'
+    'card-item6.jpg'
 ),
 (
     'Adidas Samba OG',
@@ -115,7 +115,7 @@ VALUES
     true,
     4.9,
     1882,
-    'card-image7.jpg'
+    'card-item7.jpg'
 ),
 (
     'Adidas Dropset Trainer',
@@ -126,7 +126,7 @@ VALUES
     true,
     4.4,
     204,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 
 -- =========================================
@@ -141,7 +141,7 @@ VALUES
     true,
     4.5,
     311,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'Puma MB.03 Basketball',
@@ -152,7 +152,7 @@ VALUES
     true,
     4.7,
     455,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'Puma Suede Classic XXI',
@@ -163,7 +163,7 @@ VALUES
     true,
     4.6,
     732,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 
 -- =========================================
@@ -178,7 +178,7 @@ VALUES
     true,
     4.5,
     268,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'Reebok Floatride Energy 5',
@@ -189,7 +189,7 @@ VALUES
     true,
     4.4,
     194,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'Reebok Club C 85',
@@ -200,7 +200,7 @@ VALUES
     true,
     4.7,
     1403,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 
 -- =========================================
@@ -215,7 +215,7 @@ VALUES
     true,
     4.3,
     88,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'Diadora Mi Basket Used',
@@ -226,7 +226,7 @@ VALUES
     true,
     4.5,
     134,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 
 -- =========================================
@@ -241,7 +241,7 @@ VALUES
     true,
     4.8,
     643,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'New Balance 550',
@@ -252,7 +252,7 @@ VALUES
     true,
     4.7,
     1294,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 
 -- =========================================
@@ -267,7 +267,7 @@ VALUES
     true,
     4.9,
     512,
-    'card-image8.jpg'
+    'card-item8.jpg'
 ),
 (
     'ASICS Gel-Quantum 360',
@@ -278,7 +278,7 @@ VALUES
     true,
     4.6,
     341,
-    'card-image8.jpg'
+    'card-item8.jpg'
 );
 
 -- =====================================================
