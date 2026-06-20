@@ -1,6 +1,6 @@
 # Stylish Backend
 
-A Flask-based REST API for managing product categories and inventory.
+A Flask-based REST v1 for managing product categories and inventory.
 
 ## Prerequisites
 
@@ -83,18 +83,18 @@ python server.py
 
 The server will be available at `http://localhost:5000`.
 
-## API Endpoints
+## v1 Endpoints
 
-- `GET /api/products` - Get all products grouped by category
-- `GET /api/products/<category_code>` - Get products by category code
-- `GET /api/product/<sku>` - Get a specific product by SKU
-- `GET /api/categories` - Get all categories
-- `POST /api/category` - Create a new category
-- `PUT /api/category/<category_code>` - Update a category
-- `DELETE /api/category/<category_code>` - Delete a category
-- `POST /api/product` - Create a new product
-- `PUT /api/product/<product_id>` - Update a product
-- `DELETE /api/product/<product_id>` - Delete a product
+- `GET /v1/products` - Get all products grouped by category
+- `GET /v1/products/<category_code>` - Get products by category code
+- `GET /v1/product/<sku>` - Get a specific product by SKU
+- `GET /v1/categories` - Get all categories
+- `POST /v1/category` - Create a new category
+- `PUT /v1/category/<category_code>` - Update a category
+- `DELETE /v1/category/<category_code>` - Delete a category
+- `POST /v1/product` - Create a new product
+- `PUT /v1/product/<product_id>` - Update a product
+- `DELETE /v1/product/<product_id>` - Delete a product
 - `GET /dashboard.html` - View the dashboard interface
 
 ## Project Structure
