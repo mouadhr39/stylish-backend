@@ -1,8 +1,13 @@
+-- Reset sequences for auto-increment
+DROP SEQUENCE IF EXISTS product_id_seq;
+DROP SEQUENCE IF EXISTS category_seq;
+DROP SEQUENCE IF EXISTS users_id_seq;
+DROP SEQUENCE IF EXISTS user_id_seq;
+DROP SEQUENCE IF EXISTS collection_id_seq;
+
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS category CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
-
--- Reset sequences for auto-increment
-DROP SEQUENCE IF EXISTS product_id_seq;
-DROP SEQUENCE IF EXISTS category_id_seq;
-DROP SEQUENCE IF EXISTS users_id_seq;
+DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS collection CASCADE;
+DROP TABLE IF EXISTS collection_product CASCADE;

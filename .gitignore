@@ -37,3 +37,6 @@ out/
 
 config.env
 *.sh
+__pycache__/
+*.pyc
+*.pyd
