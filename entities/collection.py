@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from extensions import db
+from .product import Product
 
 collection_bp = Blueprint('collection', __name__)
 
@@ -91,3 +92,49 @@ def get_collection_products(collection_code):
             "imagePath": p.image_path
         })
     return jsonify(result)
+
+@collection_bp.route('/v1/collection/<string:collection_code>/products', methods=['POST'])
+def add_product_to_collection(collection_code):
+    collection = Collection.query.filter_by(code=collection_code).first()
+    if not collection:
+        abort(404, description="Collection not found")
+    data = request.json
+    if not data or not data.get('sku'):
+        abort(400, description="Product SKU is required")
+    product = Product.query.filter_by(sku=data['sku']).first()
+    if not product:
+        abort(404, description="Product not found")
+    # Check if already associated
+    stmt = db.select(collection_product).where(
+        collection_product.c.collection_id == collection.id,
+        collection_product.c.product_id == product.id
+    )
+    if db.session.execute(stmt).first():
+        abort(409, description="Product already in collection")
+    # Insert association
+    insert_stmt = collection_product.insert().values(
+        collection_id=collection.id,
+        product_id=product.id
+    )
+    db.session.execute(insert_stmt)
+    db.session.commit()
+    return jsonify({"message": "Product added to collection"}), 201
+
+@collection_bp.route('/v1/collection/<string:collection_code>/products/<string:product_sku>', methods=['DELETE'])
+def remove_product_from_collection(collection_code, product_sku):
+    collection = Collection.query.filter_by(code=collection_code).first()
+    if not collection:
+        abort(404, description="Collection not found")
+    product = Product.query.filter_by(sku=product_sku).first()
+    if not product:
+        abort(404, description="Product not found")
+    # Delete association
+    delete_stmt = collection_product.delete().where(
+        collection_product.c.collection_id == collection.id,
+        collection_product.c.product_id == product.id
+    )
+    result = db.session.execute(delete_stmt)
+    if result.rowcount == 0:
+        abort(404, description="Product not found in collection")
+    db.session.commit()
+    return jsonify({"message": "Product removed from collection"}), 200
