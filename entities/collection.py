@@ -4,7 +4,6 @@ from .product import Product
 
 collection_bp = Blueprint('collection', __name__)
 
-# Association table for many-to-many between Collection and Product
 collection_product = db.Table('collection_product',
     db.Column('collection_id', db.Integer, db.ForeignKey('collection.id'), primary_key=True),
     db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
@@ -18,13 +17,33 @@ class Collection(db.Model):
     products = db.relationship('Product', secondary=collection_product, lazy='subquery',
         backref=db.backref('collections', lazy=True))
 
-# CRUD Endpoints for Collections
-@collection_bp.route('/v1/collections', methods=['GET'])
+
+def collection_payload(collection):
+    return {"id": collection.id, "code": collection.code, "name": collection.name}
+
+
+def product_payload(product):
+    return {
+        "id": product.id,
+        "name": product.name,
+        "sku": product.sku,
+        "price": float(product.price),
+        "currency": product.currency,
+        "inStock": product.in_stock,
+        "rating": float(product.rating or 0),
+        "reviews": product.reviews,
+        "imagePath": product.image_path,
+    }
+
+
+@collection_bp.route('/v1/collection', methods=['GET'])
 def get_collections():
     collections = Collection.query.all()
-    return jsonify([{"id": c.id, "code": c.code, "name": c.name} for c in collections])
+    return jsonify([collection_payload(c) for c in collections])
+
 
 @collection_bp.route('/v1/collection', methods=['POST'])
+
 def create_collection():
     data = request.json
     if not data or not data.get('name'):
@@ -41,59 +60,52 @@ def create_collection():
     collection = Collection(name=data['name'], code=data['code'])
     db.session.add(collection)
     db.session.commit()
-    return jsonify({"id": collection.id, "code": collection.code, "name": collection.name}), 201
+    return jsonify(collection_payload(collection)), 201
+
 
 @collection_bp.route('/v1/collection/<string:collection_code>', methods=['PUT'])
+
 def update_collection(collection_code):
     collection = Collection.query.filter_by(code=collection_code).first()
     if not collection:
         abort(404, description="Collection not found")
-    
+
     data = request.json
     if not data or not data.get('name'):
         abort(400, description="Collection name is required")
-    
+
     existing = Collection.query.filter_by(name=data['name']).first()
     if existing and existing.code != collection_code:
         abort(409, description="Collection name already exists")
-    
+
     collection.name = data['name']
     db.session.commit()
-    return jsonify({"id": collection.id, "code": collection.code, "name": collection.name})
+    return jsonify(collection_payload(collection))
+
 
 @collection_bp.route('/v1/collection/<string:collection_code>', methods=['DELETE'])
+
 def delete_collection(collection_code):
     collection = Collection.query.filter_by(code=collection_code).first()
     if not collection:
         abort(404, description="Collection not found")
-    
+
     db.session.delete(collection)
     db.session.commit()
     return '', 204
+
 
 @collection_bp.route('/v1/collection/<string:collection_code>/products', methods=['GET'])
 def get_collection_products(collection_code):
     collection = Collection.query.filter_by(code=collection_code).first()
     if not collection:
         abort(404, description="Collection not found")
-    
-    products = collection.products
-    result = []
-    for p in products:
-        result.append({
-            "id": p.id,
-            "name": p.name,
-            "sku": p.sku,
-            "price": float(p.price),
-            "currency": p.currency,
-            "inStock": p.in_stock,
-            "rating": float(p.rating),
-            "reviews": p.reviews,
-            "imagePath": p.image_path
-        })
-    return jsonify(result)
+
+    return jsonify([product_payload(p) for p in collection.products])
+
 
 @collection_bp.route('/v1/collection/<string:collection_code>/products', methods=['POST'])
+
 def add_product_to_collection(collection_code):
     collection = Collection.query.filter_by(code=collection_code).first()
     if not collection:
@@ -104,14 +116,12 @@ def add_product_to_collection(collection_code):
     product = Product.query.filter_by(sku=data['sku']).first()
     if not product:
         abort(404, description="Product not found")
-    # Check if already associated
     stmt = db.select(collection_product).where(
         collection_product.c.collection_id == collection.id,
         collection_product.c.product_id == product.id
     )
     if db.session.execute(stmt).first():
         abort(409, description="Product already in collection")
-    # Insert association
     insert_stmt = collection_product.insert().values(
         collection_id=collection.id,
         product_id=product.id
@@ -120,7 +130,9 @@ def add_product_to_collection(collection_code):
     db.session.commit()
     return jsonify({"message": "Product added to collection"}), 201
 
+
 @collection_bp.route('/v1/collection/<string:collection_code>/products/<string:product_sku>', methods=['DELETE'])
+
 def remove_product_from_collection(collection_code, product_sku):
     collection = Collection.query.filter_by(code=collection_code).first()
     if not collection:
@@ -128,7 +140,6 @@ def remove_product_from_collection(collection_code, product_sku):
     product = Product.query.filter_by(sku=product_sku).first()
     if not product:
         abort(404, description="Product not found")
-    # Delete association
     delete_stmt = collection_product.delete().where(
         collection_product.c.collection_id == collection.id,
         collection_product.c.product_id == product.id

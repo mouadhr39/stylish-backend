@@ -17,30 +17,33 @@ class Product(db.Model):
     reviews = db.Column(db.Integer, default=0)
     image_path = db.Column(db.String(255), nullable=True)
 
-# We'll import Collection inside functions to avoid circular imports if needed
 
-@product_bp.route('/v1/products', methods=['GET'])
+def product_payload(product, include_category_code=True):
+    payload = {
+        "id": product.id,
+        "name": product.name,
+        "sku": product.sku,
+        "price": float(product.price),
+        "currency": product.currency,
+        "category_code": product.category_code if include_category_code else None,
+        "inStock": product.in_stock,
+        "rating": float(product.rating or 0),
+        "reviews": product.reviews,
+        "imagePath": product.image_path,
+    }
+    return payload
+
+
+@product_bp.route('/v1/product', methods=['GET'])
 def get_products():
     categories = Category.query.all()
     result = {}
     for cat in categories:
-        result[cat.name] = [
-            {
-                "id": p.id,
-                "name": p.name,
-                "sku": p.sku,
-                "price": float(p.price),
-                "currency": p.currency,
-                "inStock": p.in_stock,
-                "rating": float(p.rating),
-                "reviews": p.reviews,
-                "imagePath": p.image_path
-            }
-            for p in cat.products
-        ]
+        result[cat.name] = [product_payload(p) for p in cat.products]
     return jsonify(result)
 
-@product_bp.route('/v1/products/<string:category_code>', methods=['GET'])
+
+@product_bp.route('/v1/product/<string:category_code>', methods=['GET'])
 def get_products_by_category(category_code):
     category = Category.query.filter_by(code=category_code).first()
     if not category:
@@ -54,42 +57,21 @@ def get_products_by_category(category_code):
         "id": category.id,
         "name": category.name,
         "code": category.code,
-        "products": [
-            {
-                "id": p.id,
-                "name": p.name,
-                "sku": p.sku,
-                "price": float(p.price),
-                "currency": p.currency,
-                "inStock": p.in_stock,
-                "rating": float(p.rating),
-                "reviews": p.reviews,
-                "imagePath": p.image_path
-            }
-            for p in products
-        ]
+        "products": [product_payload(p) for p in products]
     }
     return jsonify(result)
+
 
 @product_bp.route('/v1/product/<string:sku>', methods=['GET'])
 def get_product(sku):
     product = Product.query.filter_by(sku=sku).first()
     if not product:
         abort(404, description="Product not found")
-    return jsonify({
-        "id": product.id,
-        "name": product.name,
-        "sku": product.sku,
-        "price": float(product.price),
-        "currency": product.currency,
-        "category": product.category.name,
-        "inStock": product.in_stock,
-        "rating": float(product.rating),
-        "imagePath": product.image_path,
-        "reviews": product.reviews
-    })
+    return jsonify(product_payload(product))
+
 
 @product_bp.route('/v1/product', methods=['POST'])
+
 def create_product():
     data = request.json
     required = ['name', 'sku', 'price', 'currency', 'category_code']
@@ -108,24 +90,16 @@ def create_product():
         category_code=data['category_code'],
         in_stock=data.get('in_stock', True),
         rating=data.get('rating', 0.0),
+        reviews=data.get('reviews', 0),
         image_path=data.get('image_path')
     )
     db.session.add(product)
     db.session.commit()
-    return jsonify({
-        "id": product.id,
-        "name": product.name,
-        "sku": product.sku,
-        "price": float(product.price),
-        "currency": product.currency,
-        "category_code": product.category_code,
-        "inStock": product.in_stock,
-        "rating": float(product.rating),
-        "reviews": product.reviews,
-        "imagePath": product.image_path
-    }), 201
+    return jsonify(product_payload(product)), 201
+
 
 @product_bp.route('/v1/product/<int:product_id>', methods=['PUT'])
+
 def update_product(product_id):
     product = Product.query.get(product_id)
     if not product:
@@ -153,24 +127,17 @@ def update_product(product_id):
         product.in_stock = data['in_stock']
     if 'rating' in data:
         product.rating = data['rating']
+    if 'reviews' in data:
+        product.reviews = data['reviews']
     if 'image_path' in data:
         product.image_path = data['image_path']
 
     db.session.commit()
-    return jsonify({
-        "id": product.id,
-        "name": product.name,
-        "sku": product.sku,
-        "price": float(product.price),
-        "currency": product.currency,
-        "category_code": product.category_code,
-        "inStock": product.in_stock,
-        "rating": float(product.rating),
-        "reviews": product.reviews,
-        "imagePath": product.image_path
-    })
+    return jsonify(product_payload(product))
+
 
 @product_bp.route('/v1/product/<int:product_id>', methods=['DELETE'])
+
 def delete_product(product_id):
     product = Product.query.get(product_id)
     if not product:

@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 Flask-CORS
 python-dotenv
+PyJWT

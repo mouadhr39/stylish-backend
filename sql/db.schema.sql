@@ -3,6 +3,8 @@
 -- Database schema definition for the Stylish Backend
 -- =====================================================
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Category table
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,

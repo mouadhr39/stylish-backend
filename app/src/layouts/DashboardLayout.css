@@ -1,0 +1,230 @@
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  flex: 1;
+}
+
+.sidebar-menu li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.2s;
+}
+
+.sidebar-menu li:hover {
+  background: #f4f4f4;
+}
+
+.sidebar-menu li.active {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+  margin: 0 0.5rem;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.toolbar {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.toolbar-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.dashboard-layout .card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: auto;
+  margin-bottom: 1rem;
+}
+
+.dashboard-layout .card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+  text-align: left;
+}
+
+.dashboard-layout button {
+  width: auto;
+}
+
+.dashboard-layout input {
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.35rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
+}
+
+.success {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.success:hover {
+  background: #15803d;
+}
+
+.danger {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.danger:hover {
+  background: #b91c1c;
+}
+
+.message {
+  margin-bottom: 1rem;
+  color: red;
+  font-size: 0.9rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+table thead th {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid #ddd;
+  color: #555;
+  font-weight: bold;
+}
+
+table tbody td {
+  padding: 0.6rem;
+  border-bottom: 1px solid #eee;
+}
+
+.icon-btn {
+  background: transparent;
+  color: #2563eb;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+
+.icon-btn:hover {
+  background: #eff6ff;
+}
+
+.icon-btn.danger {
+  color: #dc2626;
+}
+
+.icon-btn.danger:hover {
+  background: #fef2f2;
+}
+
+.logout-btn {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.logout-btn:hover {
+  background: #f4f4f4;
+  color: #333;
+}
