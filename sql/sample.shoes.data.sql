@@ -286,16 +286,16 @@ VALUES
 -- =====================================================
 
 -- Retrieve products with category names
-SELECT
-    p.id,
-    p.name,
-    p.sku,
-    p.price,
-    p.currency,
-    c.name AS category,
-    p.in_stock,
-    p.rating,
-    p.reviews
-FROM product p
-JOIN category c
-    ON p.category_code = c.code;
+--SELECT
+--    p.id,
+--    p.name,
+--    p.sku,
+--    p.price,
+--    p.currency,
+--    c.name AS category,
+--    p.in_stock,
+--    p.rating,
+--    p.reviews
+--FROM product p
+--JOIN category c
+--    ON p.category_code = c.code;
