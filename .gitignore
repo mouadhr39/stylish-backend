@@ -36,7 +36,7 @@ out/
 .vscode/
 
 config.env
-*.sh
+exec.sh
 __pycache__/
 *.pyc
 *.pyd
